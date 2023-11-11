@@ -1,68 +1,82 @@
-import React, { useEffect, useState,lazy,Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense, createContext } from "react";
 import "./App.css";
 import { Auth } from "./pages/Auth";
 import { auth } from "./utils/firebaseUtils";
 import { ChakraProvider } from "@chakra-ui/react";
-import {  createBrowserRouter, RouterProvider } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoadingPage from "./components/Loading";
 
-const Profile = React.lazy(() => import('./pages/Profile'));
-const HomeScreen = React.lazy(() => import('./pages/HomeScreen'));
+const Profile = lazy(() => import('./pages/Profile'));
+const HomeScreen = lazy(() => import('./pages/HomeScreen'));
+
+// prop drilling avoidance.
+export const UserContext = createContext();
 
 function App() {
   const [user, setUser] = useState(null);
-const [loading,setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      console.log("authUser object is", authUser);
-      if (authUser) {
-        if (authUser?.emailVerified) {
-          alert("User email is verified. Welcome onboard!");
-          setUser(authUser);
-        } else {
-          alert("User is signed in, but email is not verified. Please verify your email.");
-          setUser(null);
-        }
+  const [loading, setLoading] = useState(false);
+
+  async function onAuthStateChangedHandler(authUser) {
+    console.log("authUser object is", authUser);
+    if (authUser) {
+      if (authUser?.emailVerified) {
+        setUser(authUser);
       } else {
-        console.log("User is signed out.");
+        await signOut(auth);
         setUser(null);
       }
-      setLoading(false);
-    });
+    } else {
+      setUser(null);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = onAuthStateChanged(auth, onAuthStateChangedHandler);
     return () => {
       unsubscribe();
       console.log("unsubscribed");
     };
   }, []);
 
-  console.log("user", user);
+  function GenericWrapper({ children }) {
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <UserContext.Provider value={user}>
+          {children}
+        </UserContext.Provider>
+      </Suspense>
+    );
+  }
+
+  console.log(user?.displayName); // Add a null check here
 
   const router = createBrowserRouter(
     user ? [
       {
         path: '/',
-        element: loading?<LoadingPage/>:user.displayName?<Suspense fallback={<div>Loading...</div>}><HomeScreen user={user}/></Suspense>:<Suspense fallback={<div>Loading...</div>}><Profile user={user} /></Suspense>
+        element: loading ? <LoadingPage /> : user?.displayName ? <GenericWrapper children={<HomeScreen />} /> : <GenericWrapper children={<Profile />} />
       },
       {
         path: '/home',
-        element: <Suspense fallback={<div>Loading...</div>}><HomeScreen user={user}/></Suspense>
+        element: <GenericWrapper children={<HomeScreen />} />
       },
       {
         path: '/profile',
-        element: <Suspense fallback={<div>Loading...</div>}><Profile user={user} /></Suspense>
+        element: <GenericWrapper children={<Profile />} />
       }
-   ] : [{
+    ] : [{
       path: '/',
-      element: loading?<LoadingPage/>:<Auth />
+      element: loading ? <LoadingPage /> : <Auth />
     }]
   );
 
   return (
     <>
       <ChakraProvider>
-      <RouterProvider router={router} /> 
+        <RouterProvider router={router} />
       </ChakraProvider>
     </>
   );

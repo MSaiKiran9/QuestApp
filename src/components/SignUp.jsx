@@ -2,21 +2,19 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup,sendEmailVerification } from 'firebase/auth';
 import { auth,googleProvider } from '../utils/firebaseUtils';
 import { Flex } from '@chakra-ui/react';
-import { Input, Button,Divider,Text } from '@chakra-ui/react';
+import { Input, Button,Divider,Text,useToast } from '@chakra-ui/react';
 import {
     Alert,
     AlertIcon,
-    AlertTitle,
-    AlertDescription,
   } from '@chakra-ui/react'
   import { Spinner } from '@chakra-ui/react'
-
+import { validateEmail,validatePassword } from '../heplerfunctions/signupvalidation';
 export const SignUp = ({toggleSignin}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-const [signedUp,setSignedUp]=useState(false);
 const [trackSignupButton,setTrackSignupButton]=useState(false);
 const [error,setError]=useState(null);
+const toast = useToast();
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -28,35 +26,51 @@ const [error,setError]=useState(null);
   const signup = async () => {
     setTrackSignupButton(true);
     try {
+      if(!validateEmail(email)){
+        toast({
+          title: 'Oops!',
+          description: 'Invalid email address',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      if(!validatePassword(password)){
+        toast({
+          title: 'Oops!',
+          description: 'Invalid password. It must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
       const userCerdential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("userCredential at Signup",userCerdential);
-      const sendemailverification = await sendEmailVerification(userCerdential.user);
-      console.log(sendemailverification);
-      setSignedUp(!signedUp);
-      console.log('User signed up successfully');
-      setTimeout(toggleSignin, 10000);
+      await sendEmailVerification(userCerdential.user);
+      setTimeout(toggleSignin, 3000);
+      toast({
+        title: 'Successfully signed up',
+        description: 'Signed up successfully , redirecting to signin page !',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error('Error signing up:', error.message);
 setError(error.message);
+toast({
+  title: 'Oops!',
+  description: error.message,
+  status: 'error',
+  duration: 3000,
+  isClosable: true,
+});
     }
     finally{
         setTrackSignupButton(false);
     }
   };
-  if (signedUp){
-    return <Flex direction="column"
-    align="center"
-    justify="center"
-    h="100vh"
-    w="100%"
-    wrap="wrap"
-    gap={3}>
-        <Alert width={"50%"} status='success' variant='subtle'>
-    <AlertIcon />
-    Signed Up Successfully ,please verify your email in the inbox and signin . Redirecting to the Sign In page !
-  </Alert>
-    </Flex>
-  }
   const handleGoogleSignin= async ()=>{
     try{
         const user=await signInWithPopup(auth,googleProvider);

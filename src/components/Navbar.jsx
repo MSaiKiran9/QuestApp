@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -8,13 +8,15 @@ import {
   Button,
   useDisclosure,
   IconButton,
-  Avatar
+  Avatar,
+  HStack
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { UserContext } from '../App';
 
-const Navbar = ({currentView ,photoURL,displayName}) => {
+const Navbar = ({currentView}) => {
   const { isOpen, onToggle } = useDisclosure();
-console.log(photoURL)
+  const user=useContext(UserContext);
   return (
     <Flex
       as="nav"
@@ -27,11 +29,13 @@ console.log(photoURL)
       borderBottom="2px solid white" // Add a bottom border
     >
       <Box>
+        <HStack>
+        <Avatar name={user?.displayName || 'User'}  size="md"  src={user?.photoURL} />
         <Text fontSize="2rem" fontWeight="bold">
           {currentView}
         </Text>
+        </HStack>
       </Box>
-      <Avatar name={displayName || 'User'}  size="2xl"  src={photoURL} />
       <IconButton
 
         display={{ base: 'block', md: 'none' }}

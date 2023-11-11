@@ -1,14 +1,18 @@
-import { Box, VStack } from '@chakra-ui/react';
-import React from 'react';
+import { Box, VStack ,Heading} from '@chakra-ui/react';
+import React, { useContext } from 'react';
 import Navbar from '../components/Navbar';
 import CreateQuiz from '../components/CreateQuiz';
 import PlayQuiz from '../components/PlayQuiz';
-const HomeScreen = ({user}) => {
+import { UserContext } from '../App';
+const HomeScreen = () => {
+  const user=useContext(UserContext);
   return (
     <>
     <Box p={4} width="100vw">
-      <Navbar currentView="Home" displayName={user.displayName} photoURL={user.photoURL}/>
-      <h1>Welcome back, {user.displayName}</h1>
+      <Navbar currentView="Home"/>
+      <Heading p={4} as="h1" size="xl">
+            Welcome, {user.displayName || 'User'}
+          </Heading>
       <VStack>
 <Box>
 <CreateQuiz/>

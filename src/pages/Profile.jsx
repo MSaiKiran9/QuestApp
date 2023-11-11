@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {updateProfile } from 'firebase/auth';
 import { auth } from '../utils/firebaseUtils';
@@ -18,12 +18,14 @@ import {
 import { useToast } from '@chakra-ui/react';
 import Navbar from '../components/Navbar';
 import { handleLogout } from '../heplerfunctions/Logout';
+import { UserContext } from '../App';
 
-const Profile = ({ user }) => {
+const Profile = () => {
   const navigate = useNavigate();
   const [newDisplayName, setNewDisplayName] = useState('');
   const [isEditingDisplayName, setIsEditingDisplayName] = useState(false);
   const toast = useToast();
+  const user=useContext(UserContext);
 
   const handleUpdateDisplayName = async () => {
     try {
@@ -80,17 +82,11 @@ const Profile = ({ user }) => {
   );
 
 
-
   return (
     <Box p={4} width="100vw">
-      <Navbar currentView="Profile" displayName={user.displayName} photoURL={user.photoURL} />
+      <Navbar currentView="Profile" />
       <Flex direction="column" align="center">
-        <Box p={4} w="100%">
-          <Heading as="h1" size="xl">
-            Welcome, {user.displayName || 'User'}
-          </Heading>
-        </Box>
-        <Stack
+        <Stack p={4}
           direction={{ base: 'column', md: 'row' }}
           spacing={4}
           align="center"

@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../utils/firebaseUtils';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Input, Button,Divider,Text } from '@chakra-ui/react';
-import {Flex,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from '@chakra-ui/react'
-import { Spinner } from '@chakra-ui/react'
+import {Flex} from '@chakra-ui/react'
+import { Spinner,useToast } from '@chakra-ui/react'
 
 export const SignIn = ({toggleSignin}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error,setError] = useState(null);
+  const [processing,setProcessing] = useState(false);
+  const toast = useToast();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -23,17 +18,29 @@ export const SignIn = ({toggleSignin}) => {
   const handlePassChange = (e) => {
     setPassword(e.target.value);
   };
-  const signup = async () => {
+  const signin = async () => {
     try {
+      setProcessing(true);
       const userCred=await signInWithEmailAndPassword(auth, email, password);
-      console.log('User signed in successfully');
-      const username= userCred.user;
-      console.log(username);
-      setError(null);
-      
+      if(!userCred.user.emailVerified){
+        toast({
+          title: 'Oops!',
+          description: 'Email is not verified , please verify your email and try logging in again ',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } catch (error) {
-      console.error('Error signing up:', error.message);
-      setError(error.message);
+      toast({
+        title: 'Oops!',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }finally{
+      setProcessing(false);
     }
   };
 
@@ -50,16 +57,11 @@ export const SignIn = ({toggleSignin}) => {
         <Text fontSize='6xl'>Q</Text>
       <Input width={"50%"} placeholder="Email" onChange={handleEmailChange} />
       <Input width={"50%"} type="password" placeholder="Password" onChange={handlePassChange} />
-      {error && (
-  <Alert width="50%" status="error" variant="subtle">
-    <AlertIcon />
-    {error}
-  </Alert>
-)}
+{processing&&<Spinner/>}
       <Button
         colorScheme="teal"
         variant="outline"
-        onClick={signup}
+        onClick={signin}
       >
         Sign In
       </Button>
