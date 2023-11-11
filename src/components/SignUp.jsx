@@ -74,7 +74,13 @@ toast({
   const handleGoogleSignin= async ()=>{
     try{
         const user=await signInWithPopup(auth,googleProvider);
-        alert("done");
+        toast({
+          title: 'Welcome :) ',
+          description: 'Howdy?',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
         console.log(user);
     }
     catch(error){

@@ -53,31 +53,36 @@ function App() {
 
   console.log(user?.displayName); // Add a null check here
 
+  const getHomeElement = () => {
+    if (loading) {
+      return <LoadingPage />;
+    } else if (user?.displayName) {
+      return <GenericWrapper children={<HomeScreen />} />;
+    } else {
+      return <GenericWrapper children={<Profile />} />;
+    }
+  };
+  
   const router = createBrowserRouter(
     user ? [
-      {
-        path: '/',
-        element: loading ? <LoadingPage /> : user?.displayName ? <GenericWrapper children={<HomeScreen />} /> : <GenericWrapper children={<Profile />} />
-      },
-      {
-        path: '/home',
-        element: <GenericWrapper children={<HomeScreen />} />
-      },
-      {
-        path: '/profile',
-        element: <GenericWrapper children={<Profile />} />
-      }
-    ] : [{
-      path: '/',
-      element: loading ? <LoadingPage /> : <Auth />
-    }]
+      { path: '/', element: getHomeElement() },
+      { path: '/home', element: <GenericWrapper children={<HomeScreen />} /> },
+      { path: '/profile', element: <GenericWrapper children={<Profile />} /> }
+    ] : [
+      { path: '/', element: loading ? <LoadingPage /> : <Auth /> }
+    ]
   );
+  
 
   return (
     <>
-      <ChakraProvider>
-        <RouterProvider router={router} />
-      </ChakraProvider>
+  <ChakraProvider>
+    {loading ? (
+      <LoadingPage />
+    ) : (
+      <RouterProvider router={router} />
+    )}
+  </ChakraProvider>
     </>
   );
 }
