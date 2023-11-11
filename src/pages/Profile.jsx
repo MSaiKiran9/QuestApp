@@ -1,7 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {updateProfile } from 'firebase/auth';
-import { auth } from '../utils/firebaseUtils';
 import {
   Box,
   Button,
@@ -16,12 +14,9 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
-import Navbar from '../components/Navbar';
-import { handleLogout } from '../heplerfunctions/Logout';
 import { UserContext } from '../App';
 
 const Profile = () => {
-  const navigate = useNavigate();
   const [newDisplayName, setNewDisplayName] = useState('');
   const [isEditingDisplayName, setIsEditingDisplayName] = useState(false);
   const toast = useToast();
@@ -81,10 +76,8 @@ const Profile = () => {
     </VStack>
   );
 
-
   return (
     <Box p={4} width="100vw">
-      <Navbar currentView="Profile" />
       <Flex direction="column" align="center">
         <Stack p={4}
           direction={{ base: 'column', md: 'row' }}
@@ -94,15 +87,7 @@ const Profile = () => {
           <Avatar name={user.displayName || 'User'}  size="2xl"  src={user?.photoURL} />
           <Box w="100%">{displayNameSection}</Box>
         </Stack>
-        <Button
-          colorScheme="red"
-          onClick={()=>handleLogout(auth,navigate,toast)}
-          mt={4}
-          size="lg"
-          w="fit-content"
-        >
-          Sign Out
-        </Button>
+       
       </Flex>
     </Box>
   );

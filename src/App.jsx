@@ -6,6 +6,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoadingPage from "./components/Loading";
+import ErrorPage from "./pages/ErrorPage";
+import ParentContainer from "./pages/ParentContainer";
 
 const Profile = lazy(() => import('./pages/Profile'));
 const HomeScreen = lazy(() => import('./pages/HomeScreen'));
@@ -18,7 +20,6 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function onAuthStateChangedHandler(authUser) {
-    console.log("authUser object is", authUser);
     if (authUser) {
       if (authUser?.emailVerified) {
         setUser(authUser);
@@ -51,25 +52,27 @@ function App() {
     );
   }
 
-  console.log(user?.displayName); // Add a null check here
-
-  const getHomeElement = () => {
-    if (loading) {
-      return <LoadingPage />;
-    } else if (user?.displayName) {
-      return <GenericWrapper children={<HomeScreen />} />;
-    } else {
-      return <GenericWrapper children={<Profile />} />;
-    }
-  };
-  
   const router = createBrowserRouter(
     user ? [
-      { path: '/', element: getHomeElement() },
-      { path: '/home', element: <GenericWrapper children={<HomeScreen />} /> },
-      { path: '/profile', element: <GenericWrapper children={<Profile />} /> }
+      { path: '/',
+        element: <UserContext.Provider value={user}><ParentContainer/></UserContext.Provider>,
+        errorElement:<ErrorPage/>,
+        children:[
+      { path: '/home', 
+        element: <GenericWrapper children={<HomeScreen />} />,
+        errorElement:<ErrorPage/>,
+       },
+      { path: '/profile',
+        element: <GenericWrapper children={<Profile />} />,
+        errorElement: <ErrorPage/>, 
+      }
+        ]
+     }
     ] : [
-      { path: '/', element: loading ? <LoadingPage /> : <Auth /> }
+      { path: '/', 
+        element: loading ? <LoadingPage /> : <Auth />,
+        errorElement:<ErrorPage/>
+       }
     ]
   );
   
