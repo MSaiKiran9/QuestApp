@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Input, Button,Divider,Text } from '@chakra-ui/react';
 import {Flex} from '@chakra-ui/react'
 import { Spinner,useToast } from '@chakra-ui/react'
+import PasswordReset from './ResetPass';
 
 export const SignIn = ({toggleSignin}) => {
   const [email, setEmail] = useState('');
@@ -67,6 +68,7 @@ export const SignIn = ({toggleSignin}) => {
       </Button>
       <Divider borderColor="gray.400" width="80%" mb={4} /> 
       <Button colorScheme='green' onClick={toggleSignin}>Sign Up</Button>
+      <PasswordReset/>
     </Flex>
   );
   

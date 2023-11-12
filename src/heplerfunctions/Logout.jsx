@@ -1,10 +1,10 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebaseUtils"; 
-export const handleLogout = async (toast,navigate) => {
+export const handleLogout = async (navigate) => {
  
     try {
       await signOut(auth);
-      navigate("/");
+      await navigate("/");
       return true;
       
     } catch (error) {

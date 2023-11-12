@@ -8,6 +8,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoadingPage from "./components/Loading";
 import ErrorPage from "./pages/ErrorPage";
 import ParentContainer from "./pages/ParentContainer";
+import ParentContainerFiller from "./components/ParentContainerFiller";
 
 const Profile = lazy(() => import('./pages/Profile'));
 const HomeScreen = lazy(() => import('./pages/HomeScreen'));
@@ -65,6 +66,15 @@ function App() {
       { path: '/profile',
         element: <GenericWrapper children={<Profile />} />,
         errorElement: <ErrorPage/>, 
+      },
+      {
+        path:'/',
+        element:<ParentContainerFiller/>
+      },
+      {
+        path:'*',
+        element:<ErrorPage/>,
+        errorElement:<ErrorPage/>
       }
         ]
      }

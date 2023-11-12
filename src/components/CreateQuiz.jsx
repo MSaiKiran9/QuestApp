@@ -1,68 +1,115 @@
 import React, { useState } from 'react';
-import { Box, Button, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  VStack,
+  Box,
+  Button,
+  Input,
+  Text,
+  HStack,
+  Select,
+  Spacer,
+} from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CreateQuiz = () => {
-  const [numQuestions, setNumQuestions] = useState(1);
-  const [questions, setQuestions] = useState([{}]);
+  const [questions, setQuestions] = useState([
+    { question: '', options: ['', '', '', ''], correctOption: '' },
+  ]);
 
-  const addQuestion = () => {
-    setNumQuestions(numQuestions + 1);
-    setQuestions([...questions, {}]);
+  const handleAddQuestion = () => {
+    setQuestions([
+      ...questions,
+      { question: '', options: ['', '', '', ''], correctOption: '' },
+    ]);
   };
 
-  const handleQuestionChange = (questionIndex, value) => {
+  const handleQuestionChange = (index, value) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].question = value;
+    updatedQuestions[index].question = value;
     setQuestions(updatedQuestions);
   };
 
-  const handleAnswerChange = (questionIndex, value) => {
+  const handleOptionChange = (questionIndex, optionIndex, value) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].answer = value;
+    updatedQuestions[questionIndex].options[optionIndex] = value;
     setQuestions(updatedQuestions);
   };
 
-  const saveQuiz = () => {
-    // Send the questions and answers to your server or perform the desired action
+  const handleCorrectOptionChange = (questionIndex, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].correctOption = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleCreateQuiz = () => {
+    // Handle creating a quiz with the questions
+    console.log('Creating quiz with questions:', questions);
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="md" p={4} w="50%">
-      <Text fontSize="xl" fontWeight="bold">
-        Create Quiz
+    <VStack mt={3} spacing={4} align="center" width="80%" m="auto">
+      <Text color={'black.400'} fontSize="xl" fontWeight="bold">
+        Create Quiz 
       </Text>
-      <Input
-        placeholder="Number of Questions"
-        type="number"
-        value={numQuestions}
-        onChange={(e) => setNumQuestions(Number(e.target.value))}
-      />
-      {questions.map((question, questionIndex) => (
-        <VStack key={questionIndex} mt={4}>
-          <Input
-            placeholder={`Question ${questionIndex + 1}`}
-            value={question.question}
-            onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
-          />
-          <Input
-            placeholder={`Answer for Question ${questionIndex + 1}`}
-            value={question.answer}
-            onChange={(e) => handleAnswerChange(questionIndex, e.target.value)}
-          />
-          <Button
-            colorScheme="teal"
-            variant="outline"
-            size="sm"
-            onClick={() => addQuestion()}
+
+      <AnimatePresence>
+        {questions.map((question, questionIndex) => (
+          <motion.div
+            key={questionIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            width="100%"
           >
-            Add Another Question
-          </Button>
-        </VStack>
-      ))}
-      <Button colorScheme="teal" size="lg" mt={4} onClick={saveQuiz}>
-        Save Quiz
+            <Box p={4} borderWidth="1px" borderRadius="md" width="100%">
+              <Input
+                value={question.question}
+                onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
+                placeholder={`Enter question ${questionIndex + 1}`}
+                mb={2}
+              />
+
+              {question.options.map((option, optionIndex) => (
+                <Input
+                  key={optionIndex}
+                  value={option}
+                  onChange={(e) =>
+                    handleOptionChange(questionIndex, optionIndex, e.target.value)
+                  }
+                  placeholder={`Option ${optionIndex + 1}`}
+                  mb={2}
+                />
+              ))}
+
+              <HStack spacing={2}>
+                <Text>Select Correct Option:</Text>
+                <Select
+                  value={question.correctOption}
+                  onChange={(e) => handleCorrectOptionChange(questionIndex, e.target.value)}
+                  width="30%"
+                >
+                  {[1, 2, 3, 4].map((optionIndex) => (
+                    <option key={optionIndex} value={optionIndex}>
+                      {`Option ${optionIndex}`}
+                    </option>
+                  ))}
+                </Select>
+                <Spacer />
+              </HStack>
+            </Box>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
+      <Button onClick={handleAddQuestion} colorScheme="teal">
+        Add Question
       </Button>
-    </Box>
+
+      <Button onClick={handleCreateQuiz} colorScheme="teal" mt={4}>
+        Finish setting up
+      </Button>
+    </VStack>
   );
 };
 

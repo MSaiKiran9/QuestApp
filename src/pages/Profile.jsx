@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
-import {updateProfile } from 'firebase/auth';
+import React, { useContext, useState, useEffect } from 'react';
+import { updateProfile } from 'firebase/auth';
+import { motion, useAnimation } from 'framer-motion';
 import {
   Box,
   Button,
@@ -15,12 +16,18 @@ import {
 } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { UserContext } from '../App';
+import PasswordReset from '../components/ResetPass';
 
 const Profile = () => {
   const [newDisplayName, setNewDisplayName] = useState('');
   const [isEditingDisplayName, setIsEditingDisplayName] = useState(false);
   const toast = useToast();
-  const user=useContext(UserContext);
+  const user = useContext(UserContext);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({ opacity: 1, y: 0 });
+  }, [controls]);
 
   const handleUpdateDisplayName = async () => {
     try {
@@ -77,19 +84,26 @@ const Profile = () => {
   );
 
   return (
-    <Box p={4} width="100vw">
-      <Flex direction="column" align="center">
-        <Stack p={4}
-          direction={{ base: 'column', md: 'row' }}
-          spacing={4}
-          align="center"
-        >
-          <Avatar name={user.displayName || 'User'}  size="2xl"  src={user?.photoURL} />
-          <Box w="100%">{displayNameSection}</Box>
-        </Stack>
-       
-      </Flex>
-    </Box>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={controls}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
+      <Box p={4} width="100vw">
+        <Flex direction="column" align="center">
+          <Stack
+            p={4}
+            direction={{ base: 'column', md: 'row' }}
+            spacing={4}
+            align="center"
+          >
+            <Avatar name={user.displayName || 'User'} size="2xl" src={user?.photoURL} />
+            <Box w="100%">{displayNameSection}</Box>
+          </Stack>
+          <PasswordReset/>
+        </Flex>
+      </Box>
+    </motion.div>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   } from '@chakra-ui/react'
   import { Spinner } from '@chakra-ui/react'
 import { validateEmail,validatePassword } from '../heplerfunctions/signupvalidation';
+import PasswordReset from './ResetPass';
 export const SignUp = ({toggleSignin}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -117,6 +118,7 @@ toast({
       <Divider borderColor="gray.400" width="80%" mb={4} /> 
       <Button colorScheme='green' onClick={toggleSignin}>Sign In</Button>
       <Button onClick={handleGoogleSignin} colorScheme='gray'>Setup with google</Button>
+      <PasswordReset/>
     </Flex>
     </>
   );
