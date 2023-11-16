@@ -15,7 +15,7 @@ export default function ErrorPage() {
         Sorry, an unexpected error has occurred.
       </Text>
       <Text fontSize="md" mb={8}>
-        <i>{error.statusText || error.message}</i>
+        <i>{error?.statusText || error?.message}</i>
       </Text>
       <Button colorScheme="teal" onClick={() => navigate(-1)}>
         Go Back

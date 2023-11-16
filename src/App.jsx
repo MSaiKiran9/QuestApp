@@ -39,7 +39,6 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, onAuthStateChangedHandler);
     return () => {
       unsubscribe();
-      console.log("unsubscribed");
     };
   }, []);
 
@@ -82,6 +81,10 @@ function App() {
       { path: '/', 
         element: loading ? <LoadingPage /> : <Auth />,
         errorElement:<ErrorPage/>
+       }
+       ,{
+        path:'*',
+        element:<ErrorPage/>
        }
     ]
   );
