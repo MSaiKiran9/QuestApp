@@ -15,22 +15,30 @@ import {
 import { CloseIcon } from '@chakra-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
+import { db } from '../utils/firebaseUtils';
+import { collection, addDoc} from 'firebase/firestore';
+import { Spinner } from '@chakra-ui/react';
 
 const CreateQuiz = () => {
   const [show,setShow]=useState(false);
   const [questions, setQuestions] = useState([
-    {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '' },
+    {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '1' },
   ]);
+  const [quizName,setQuizName] = useState('')
+  const [loading,setLoading] = useState(false);
   const toast = useToast();
 
-  const handleAddQuestion = () => {
-    if(questions.length==0) {
+  const checkLastQuizItemIsValied =()=>{
+    let isvalied=true;
+    const prevQuestion =  questions[questions?.length-1];
+
+    if(questions.length===0) {
       setQuestions([
-        {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '' },
-      ]);
+        {id:uuidv4(),quizName, question: '', options: ['', '', '', ''], correctOption: '' },
+      ]); 
       return;
     };
-    const prevQuestion =  questions[questions?.length-1];
+
     if(prevQuestion?.question===""){
       toast({
         title: 'Question is empty',
@@ -39,9 +47,8 @@ const CreateQuiz = () => {
         duration: 2000,
         isClosable: true,
       });      
-      return;
+      isvalied=false;
     }
-
     for (let [index, element] of prevQuestion?.options?.entries()) {
       if (element === "") {
         toast({
@@ -51,10 +58,17 @@ const CreateQuiz = () => {
           duration: 2000,
           isClosable: true,
         });
-        return;
+        isvalied=false;
       }
     }
-    
+    return isvalied;
+  }
+
+  const handleAddQuestion = () => {
+
+   if (!checkLastQuizItemIsValied()){
+return;
+   }
     setQuestions([
       ...questions,
       {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '' },
@@ -79,16 +93,77 @@ const CreateQuiz = () => {
     setQuestions(updatedQuestions);
   };
 
-  const handleCreateQuiz = () => {
-    // Handle creating a quiz with the questions
-    console.log('Creating quiz with questions:', questions);
+  const handleCreateQuiz = async (questions) => {
+    if (quizName==="") {
+      toast({
+        title: 'Quiz name is empty !',
+        description: 'Quiz name can\'t be empty',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+    if(questions.length===0){
+  toast({
+    title: 'No questions',
+    description: "Add some questions !",
+    status: 'error',
+    duration: 2000,
+    isClosable: true,
+    });     
+    return;
+    }
+    if(!checkLastQuizItemIsValied()){
+return;
+    }
+    try{
+      const quizCollection = collection(db,'mcq-arrays');
+      const questionsToDb = [...questions];
+      questionsToDb[questionsToDb.length]=quizName;
+      console.log(questionsToDb);
+      setLoading(true);
+     await addDoc(quizCollection,{
+      createdquiz:{questionsToDb}
+     });
+    toast({
+      title: 'Success',
+      description: 'Your quiz has been added successfully',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+     setQuizName("");
+     setQuestions([
+      {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '1' },
+    ]);
+    }
+    catch(error){
+      console.log("error"+error);
+      toast({
+        title: 'Failure',
+        description: 'There is some error adding your question!',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    }
+    finally{
+      setLoading(false);
+    }
   };
+
   const handleShowOrHideCreateQuiz=()=>{
 setShow(!show);
   }
+
   const handleRemoveQuestion=(id)=>{
     const updatedQuestions = questions.filter(questions=>questions.id!=id);
     setQuestions(updatedQuestions);
+  }
+
+  const handleQuizIdentifierChange=(value)=>{
+setQuizName(value);
   }
 
   return (<>
@@ -100,6 +175,10 @@ setShow(!show);
   </Center>
   {show && <VStack  mt={3} spacing={4} align="center" width="80%" m="auto">
       <AnimatePresence>
+      <Input value={quizName} onChange={(e) => handleQuizIdentifierChange(e.target.value)}
+       placeholder={`Give some name for your quiz! `}
+                mb={2}
+              />
         {questions.map((question, questionIndex) => (
           <motion.div
             key={question.id}
@@ -160,9 +239,9 @@ setShow(!show);
         Add Question
       </Button>
 
-      <Button mb={3} onClick={handleCreateQuiz} colorScheme="purple" mt={1}>
+      {loading?<Spinner mb={3}/>:<Button mb={3} onClick={()=>handleCreateQuiz(questions)} colorScheme="purple" mt={1}>
         Finish setting up
-      </Button>
+      </Button>}
     </VStack>}
   </Box>
   </>
