@@ -1,4 +1,4 @@
-import { Center,Button } from '@chakra-ui/react'
+import { Center,Button,Heading, VStack } from '@chakra-ui/react'
 import { collection,doc,getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { db } from '../utils/firebaseUtils';
@@ -23,27 +23,28 @@ setShow(!show);
     };
   
     fetchData();
-  },[]);
+  },[show]);
 
   // console.log(quizContent[0][0].question);
   // first quiz first question
 
   return (
-    <>
+    <VStack>
     <Center>
-      <Button onClick={handleDisplayComponent} >
+      <Button mb={4} onClick={handleDisplayComponent} >
         PlayQuiz
       </Button>
     </Center>
     {
       show && <div>
-        <h1>some data</h1>
+         <center><Heading size="md" mb={3}>Select a Quiz</Heading></center>
         {
+          
  quizContent&&<CreateQuizDisplayer quizData={quizContent}/>
         }
       </div>
     }
-    </>
+    </VStack>
   )
 }
 

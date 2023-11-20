@@ -71,7 +71,7 @@ return;
    }
     setQuestions([
       ...questions,
-      {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '' },
+      {id:uuidv4(), question: '', options: ['', '', '', ''], correctOption: '1' },
     ]);
   };
 
