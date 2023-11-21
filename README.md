@@ -1,4 +1,4 @@
-**Quiz App With React and Firebase**
+## **Quiz App With React and Firebase**
 
 **setup** 
 - Go to the root of the project and type **npm run dev**
@@ -6,7 +6,7 @@
 - You can directly try running app with your firebase project configuration just make a file **config.js** in utils folder .
 - Now , everything is good to go :)
 
-**References:**
+## **References:**
 
 **Signup/Signin**:
 
@@ -23,13 +23,17 @@
 
 <img width="772" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/640bcdcf-c5e2-40de-a6b3-7c977f0b2fe0">
 
-**Contribute**:
+## **How to Contribute ?**:
 1. Firstly , Thankyou for considering to contribute :)
 2. Fork the project and start making changes .
 3. If you want to make new issues write clear description of the bug .
 4. For prs also write clear description describing what the pr will introduce.
+5. If you like the project you can star the project :) 
 
-**Further Works**:
+## **Further Works**:
 1. Refactoring balance .
 2. Searching and Fixing bugs balance .
 3. Securing the app balance (testing).
+4. Styling and Making the whole app responsive left .
+
+if (( Any queries ) || ( Suggestions )) ping me :)
