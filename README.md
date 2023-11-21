@@ -10,18 +10,26 @@
 
 **Signup/Signin**:
 
-<img width="513" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/639524f1-0c7b-4a9e-92d3-08c1e68968d7">
+<img width="518" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/31786139-9f44-4d39-a4f4-0655a845c1ae">
+
 
 **Welcome Page**:
 
-<img width="918" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/ad2dad61-016b-4f7a-bf67-7080e1214bc8">
+<img width="918" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/83331749-053d-4a9b-9ac5-9086293a0ac3">
+
+
+**Profile page**:
+
+<img width="881" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/a6d9437e-795f-4063-8139-8e7ef33ec6c6">
+
 
 **Create / Play Quiz**:
 
-<img width="791" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/19273fac-ea32-4dc9-9467-2b56941b9579">
+<img width="262" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/7193a4d1-c4df-447f-9b14-b7d979edd686">
 
 
-<img width="772" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/640bcdcf-c5e2-40de-a6b3-7c977f0b2fe0">
+<img width="267" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/f3d93dd4-03bf-40a4-ad70-6a0823c80eb3">
+
 
 ## **How to Contribute ?**:
 1. Firstly , Thankyou for considering to contribute :)
