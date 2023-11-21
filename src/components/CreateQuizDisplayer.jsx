@@ -4,8 +4,6 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Modal
 
 //all quizes :
 const CreateQuizDisplayer = ({ quizData }) => {
-  console.log("initial");
-  console.log(quizData);
   return (
     <VStack spacing={8} wrap="wrap">
       {quizData.map((data, index) => (
@@ -31,22 +29,17 @@ const QuizNames = ({ datatoDisplay }) => {
   const handleQuizSubmit = () => {
     let correctCount = 0;
     questionsArray.forEach(question => {
-      console.log(question);
-      console.log(quizState);
       if (quizState[question.id] === +question.correctOption) {
         correctCount++;
       }
     });
     questionsArray.forEach(question => {
-     console.log(question.question,question.correctOption)
     });
     setResult(`Your result is ${(correctCount/questionsArray.length)*100}%`);
     onOpen();
-    console.log(`You answered ${correctCount} out of ${questionsArray.length} questions correctly.`);
   };
 
   const handleOptionChange = (questionId, selectedOption) => {
-    console.log(questionId,selectedOption);
     setQuizState(prevState => ({ ...prevState, [questionId]: selectedOption }));
   };
 
@@ -84,11 +77,9 @@ const DisplayCards = ({ question, id, options, onOptionsChange }) => {
 
   const [value, setValue] = useState(options[0]);
 const dict=options.reduce((acc, quest,index) => ({...acc, [quest]: index+1}), {})
-console.log(dict,options);
   const handleChange = (value) => {
     setValue(value);
     onOptionsChange(id, dict[value]);
-    console.log(`Question ID: ${id}, Selected Option: ${value}`);
   };
 
   return (

@@ -25,9 +25,6 @@ setShow(!show);
     fetchData();
   },[show]);
 
-  // console.log(quizContent[0][0].question);
-  // first quiz first question
-
   return (
     <VStack>
     <Center>
