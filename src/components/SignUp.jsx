@@ -82,7 +82,6 @@ toast({
           duration: 3000,
           isClosable: true,
         });
-        console.log(user);
     }
     catch(error){
         console.log(error.message);
