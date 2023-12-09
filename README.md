@@ -1,34 +1,21 @@
 ## **Quiz App With React and Firebase**
+**Checkout Live** : <a href="https://prod-msaikiran9s-projects.vercel.app/" target="_blank">Application link </a>
 
 **setup** 
 - Go to the root of the project and type **npm run dev**
 - It'll redirect to the front end of the project
-- You can directly try running app with your firebase project configuration just make a file **config.js** in utils folder .
+- You can directly try running app with your firebase project configuration just make a .env for **config.js** in utils folder.
 - Now , everything is good to go :)
 
 ## **References:**
 
-**Signup/Signin**:
+**Signup/Signin - Entry point**:
 
 <img width="518" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/31786139-9f44-4d39-a4f4-0655a845c1ae">
 
 
-**Welcome Page**:
-
-<img width="918" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/83331749-053d-4a9b-9ac5-9086293a0ac3">
 
 
-**Profile page**:
-
-<img width="881" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/a6d9437e-795f-4063-8139-8e7ef33ec6c6">
-
-
-**Create / Play Quiz**:
-
-<img width="262" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/7193a4d1-c4df-447f-9b14-b7d979edd686">
-
-
-<img width="267" alt="image" src="https://github.com/MSaiKiran9/QuestApp/assets/116418856/f3d93dd4-03bf-40a4-ad70-6a0823c80eb3">
 
 
 ## **How to Contribute ?**:
@@ -40,8 +27,8 @@
 
 ## **Further Works**:
 1. Refactoring balance .
-2. Searching and Fixing bugs balance .
-3. Securing the app balance (testing).
-4. Styling and Making the whole app responsive left .
+2. Setting up a server between firebase server and client to handle whether users mail verification on server . (this is currently implemented with useEffect internally!) (Also the server will handle the quiz submissions if implemented etc ...)
+4. Can add quiz re-edit & delete functionality , for the user who created it (in profile section) .
+5. Please add any other functionalities that might be good (in issues).
 
-if (( Any queries ) || ( Suggestions )) ping me :)
+if (( Any queries ) || ( Suggestions )) => ping me :)
