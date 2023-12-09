@@ -26,7 +26,7 @@ setShow(!show);
   },[show]);
 
   return (
-    <VStack>
+    <VStack border={show && '2px solid #ADD8E6'} borderRadius={show && '2rem'} m={3} p={4}>
     <Center>
       <Button mb={4} onClick={handleDisplayComponent} >
         PlayQuiz
