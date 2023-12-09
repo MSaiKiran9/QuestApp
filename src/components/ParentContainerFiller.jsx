@@ -20,8 +20,8 @@ const ParentContainerFiller = () => {
         Welcome !
       </Heading>
       <Text mb={6}>
-        Play exciting quizzes and challenge your knowledge. Create your quizzes
-        and share them with the world!
+        Play / Create new quizzes
+        and share them with the community!
       </Text>
 
       <MotionBox
